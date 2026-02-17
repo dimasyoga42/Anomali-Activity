@@ -41,14 +41,14 @@ export const useAnomaliStore = create((set) => ({
       set({ error: error.message, loading: false });
     }
   },
-  editDatauser: async (name, ign, image_url) => {
+  editDatauser: async (name, ign, username, image_url) => {
     set({ loading: true, error: null });
     try {
       const { data, error } = await supabase.from("userlogin").update({
         name,
         ign,
         image_url
-      }).eq("name", name).select().single();
+      }).eq("username", username).select().single();
       if (error) throw error;
       set((state) => ({
         user: data,
@@ -61,7 +61,7 @@ export const useAnomaliStore = create((set) => ({
   fetchMember: async () => {
     set({ loading: true, error: null });
     try {
-      const { data, error } = await supabase.from("member").select("*");
+      const { data, error } = await supabase.from("userlogin").select("id, name, ign, role, image_url");
       if (error) throw error;
       set({ member: data, loading: false });
     } catch (error) {
@@ -79,18 +79,18 @@ export const useAnomaliStore = create((set) => ({
     }
   },
 
-  insertMember: async (name, ign, nomerphone, status) => {
+  editMember: async (id, name, ign, image_url, role) => {
     set({ loading: true, error: null });
     try {
-      const { data, error } = await supabase.from("member").insert({
+      const { data, error } = await supabase.from("userlogin").update({
         name,
         ign,
-        nomerphone,
-        status
-      }).select().single()
+        image_url,
+        role,
+      }).eq("id", id).select().single()
       if (error) return set({ error: error.message, loading: false });
       set((state) => ({
-        member: [...state.member, data],
+        member: state.member.map(m => m.id === id ? data : m),
         loading: false,
       }))
     } catch (error) {

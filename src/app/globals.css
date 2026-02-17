@@ -5,3 +5,17 @@
   --font-Poppins: "Poppins", sans-serif;
 
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Safari, Chrome, Opera */
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE dan Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}

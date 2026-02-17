@@ -2,6 +2,7 @@
 
 import { useAnomaliStore } from "@/store/authstore";
 import { Edit } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Profile = ({ session }) => {
@@ -29,13 +30,13 @@ const Profile = ({ session }) => {
 
   const handleSave = () => {
     // TODO: panggil store function untuk update user
-    editDatauser(name, ign, image_url);
+    editDatauser(name, ign, session.user.username, image_url);
     console.log({ name, ign, image_url });
     closeMenu();
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <div className="w-full h-lvh flex items-center justify-center"><p>Loading...</p></div>;
+  if (error) return <p className="w-full h-lvh flex items-center justify-center text-red-500">Error: {error}</p>;
 
   return (
     <div className="w-full h-lvh">
@@ -55,7 +56,7 @@ const Profile = ({ session }) => {
             className="flex justify-center m-auto items-center gap-1 text-sm text-pink-500 hover:text-pink-700 mt-1"
           >
             <Edit className="w-4 h-4" />
-            Edit Profile
+            Edit Profil
           </button>
         </div>
       </div>
@@ -110,7 +111,9 @@ const Profile = ({ session }) => {
           <div className="flex justify-between items-center">
             <h1 className="text-sm ml-2 font-bold text-gray-500">Blog Terbaru:</h1>
             <button className="text-sm ml-2 text-gray-500 bg-pink-500 text-white px-3 py-1 rounded-md mr-2">
-              Buat Blog
+              <Link href={`/editor/${user.id}`}>
+                Buat Blog
+              </Link>
             </button>
           </div>
 

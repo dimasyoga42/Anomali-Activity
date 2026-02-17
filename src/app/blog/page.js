@@ -5,9 +5,9 @@ import { authOptions } from "../api/auth/[...nextauth]/route"
 const Blogpage = async () => {
   const session = await getServerSession(authOptions);
   return (
-    <>
+    <div className="max-w-5xl mx-auto">
       <Nav session={session} />
-      <div className="flex gap-2 mt-9 w-full h-lvh">
+      <div className="flex gap-2 mt-9 h-lvh">
         <div className="w-[98%] h-[100px]">
           <div className=" flex justify-between items-center">
             <h1 className="text-sm ml-2 font-bold text-gray-500">Blog Terbaru:</h1>
@@ -49,7 +49,7 @@ const Blogpage = async () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 export default Blogpage

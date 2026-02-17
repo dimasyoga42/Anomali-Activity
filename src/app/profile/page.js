@@ -12,11 +12,11 @@ const ProfilePage = async () => {
   console.log(session);
   if (!session) redirect("/login");
   return (
-    <>
+    <div className="max-w-5xl mx-auto">
       <Nav session={session} />
       <Profile session={session} />
       <Foter />
-    </>
+    </div>
   )
 }
 export default ProfilePage

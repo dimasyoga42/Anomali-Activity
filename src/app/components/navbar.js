@@ -13,7 +13,10 @@ const Nav = ({ session, image }) => {
             <Link href="/profile">Info</Link>
           </li>
           <li>
-            {session ? <p>{session.user?.username}</p> : <Link href="/login">Login</Link>}
+            {session?.user?.role === "admin" ? <Link href="/admin">Admin</Link> : null}
+          </li>
+          <li>
+            {session ? <p>{session.user.username}</p> : <Link href="/login">Login</Link>}
           </li>
         </ul>
       </nav>
