@@ -1,6 +1,12 @@
-const Blogpage = () => {
+import { getServerSession } from "next-auth"
+import Nav from "../components/navbar"
+import { authOptions } from "../api/auth/[...nextauth]/route"
+
+const Blogpage = async () => {
+  const session = await getServerSession(authOptions);
   return (
     <>
+      <Nav session={session} />
       <div className="flex gap-2 mt-9 w-full h-lvh">
         <div className="w-[98%] h-[100px]">
           <div className=" flex justify-between items-center">

@@ -1,12 +1,63 @@
 import { create } from "zustand";
 import { supabase } from "@/app/lib/db";
-
-export const useStore = create((set) => ({
+import { redirect } from "next/navigation";
+export const useAnomaliStore = create((set) => ({
   blog: [],
   member: [],
+  user: [],
   banner: [],
+  register: [],
   loading: false,
   error: null,
+  userRegister: async (name, ign, username, password) => {
+    set({ loading: true, error: null });
+    try {
+      const image_url = "https://i.ibb.co/0yftxyHT/PP-kosong.jpg"
+      const role = "member";
+      const { data, error } = await supabase.from("userlogin").insert({
+        image_url,
+        name,
+        ign,
+        username,
+        password,
+        role
+      }).select().single()
+      if (error) throw error;
+      set((state) => ({
+        register: [...state.register, data],
+        loading: false,
+      }))
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  fetchDatauser: async (username) => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase.from("userlogin").select("*").eq("username", username).single();
+      if (error) throw error;
+      set({ user: data, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  editDatauser: async (name, ign, image_url) => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase.from("userlogin").update({
+        name,
+        ign,
+        image_url
+      }).eq("name", name).select().single();
+      if (error) throw error;
+      set((state) => ({
+        user: data,
+        loading: false,
+      }))
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
   fetchMember: async () => {
     set({ loading: true, error: null });
     try {

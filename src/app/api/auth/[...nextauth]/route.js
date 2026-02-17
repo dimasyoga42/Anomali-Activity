@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 import { supabase } from "@/app/lib/db";
 
 export const authOptions = {
@@ -7,42 +8,63 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
+        username: {},
+        password: {},
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials.password) {
+        if (!credentials?.username || !credentials?.password) {
           return null;
         }
-        const { data, error } = await supabase.from("anomaliLogin").select("id, username, password").eq("username", credentials.username).single();
-        if (error || !data) {
-          return null;
-        }
-        if (data.password !== credentials.password) {
-          return null;
-        }
-        return { id: data.id, username: data.username };
-      }
-    })
+
+        const { data, error } = await supabase
+          .from("userlogin")
+          .select("*")
+          .eq("username", credentials.username)
+          .single();
+
+        if (error || !data) return null;
+
+        const isValid = await bcrypt.compare(credentials.password, data.password);
+
+        if (!isValid) return null;
+
+        return {
+          id: data.id,
+          name: data.name,
+          username: data.username,
+          role: data.role,
+        };
+      },
+    }),
   ],
+
   session: {
     strategy: "jwt",
   },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
         token.username = user.username;
       }
       return token;
     },
+
     async session({ session, token }) {
       session.user.id = token.id;
+      session.user.role = token.role;
       session.user.username = token.username;
       return session;
-    }
+    },
   },
-  secret: process.env.NEXTAUTH_SECRET
+
+  pages: {
+    signIn: "/login",
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
