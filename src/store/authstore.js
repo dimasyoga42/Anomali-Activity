@@ -112,6 +112,33 @@ export const useAnomaliStore = create((set) => ({
     } catch (error) {
       set({ error: error.message, loading: false });
     }
+  },
+  insertBlog: async (title, desc, isi, author_id) => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase.from("blog").insert({
+        title, desc, isi, author_id
+      }).select().single()
+      if (error) throw error;
+      set((state) => ({
+        blog: [...state.blog, data],
+        loading: false,
+      }))
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  viewBlog: async (id) => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase.from("blogDB").select("title, desc, isi, author_id").eq("id", id).single();
+      const { data: authorData, error: authorError } = await supabase.from("userlogin").select("name").eq("id", data.author_id).single();
+      if (error) throw error;
+      if (authorError) throw authorError;
+      set({ blog: { ...data, author_name: authorData.name }, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
   }
 
 }))
