@@ -128,6 +128,36 @@ export const useAnomaliStore = create((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+  fetchBlog: async () => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase.from("blogDB").select("id, title, desc, isi, author_id");
+      const { data: authorsData, error: authorsError } = await supabase.from("userlogin").select("id, name").eq("id", data.map(b => b.author_id));
+      if (error) throw error;
+      if (authorsError) throw authorsError;
+      const blogsWithAuthors = data.map(b => {
+        const author = authorsData.find(a => a.id === b.author_id);
+        return { ...b, author_name: author ? author.name : "Unknown Author" };
+      });
+      set({ blog: blogsWithAuthors, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  fetchBlogByAuthor: async (author_id) => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase.from("blogDB").select("id, title, desc, isi, author_id").eq("author_id", author_id);
+      const { data: authorsData, error: authorsError } = await supabase.from("userlogin").select("id, name").eq("id", author_id).single();
+      if (error) throw error;
+      if (authorsError) throw authorsError;
+      const blogsWithAuthors = data.map(b => ({ ...b, author_name: authorsData.name }));
+      if (error) throw error;
+      set({ blog: blogsWithAuthors, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
   viewBlog: async (id) => {
     set({ loading: true, error: null });
     try {

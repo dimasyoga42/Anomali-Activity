@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Profile = ({ session }) => {
-  const { user, fetchDatauser, editDatauser, loading, error } = useAnomaliStore();
+  const { user, blog, fetchDatauser, editDatauser, fetchBlogByAuthor, loading, error } = useAnomaliStore();
   const [menu, setMenu] = useState(false);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -17,7 +17,8 @@ const Profile = ({ session }) => {
     if (!session?.user?.username) return;
 
     fetchDatauser(session.user.username);
-  }, [fetchDatauser, session?.user?.username]);
+    fetchBlogByAuthor(session.user.id);
+  }, [fetchDatauser, fetchBlogByAuthor, session?.user?.username]);
 
   // Saat menu dibuka, isi state dari user
   const openMenu = () => {
@@ -118,11 +119,12 @@ const Profile = ({ session }) => {
           </div>
 
           <div className="flex gap-2 mt-2 flex-col">
-            {user?.blogs?.length ? (
-              user.blogs.map((blog, i) => (
+            {blog.length ? (
+              blog.map((blog, i) => (
                 <div key={i}>
                   <h1 className="text-sm ml-2 font-bold text-pink-500">{blog.title}</h1>
                   <p className="text-sm ml-2 text-gray-500">{blog.desc}</p>
+                  <p className="text-xs ml-2 text-gray-400">By {blog.author_name}</p>
                 </div>
               ))
             ) : (
