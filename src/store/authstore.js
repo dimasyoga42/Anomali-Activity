@@ -116,7 +116,7 @@ export const useAnomaliStore = create((set) => ({
   insertBlog: async (title, desc, isi, author_id) => {
     set({ loading: true, error: null });
     try {
-      const { data, error } = await supabase.from("blog").insert({
+      const { data, error } = await supabase.from("blogDB").insert({
         title, desc, isi, author_id
       }).select().single()
       if (error) throw error;
@@ -130,20 +130,47 @@ export const useAnomaliStore = create((set) => ({
   },
   fetchBlog: async () => {
     set({ loading: true, error: null });
+
     try {
-      const { data, error } = await supabase.from("blogDB").select("id, title, desc, isi, author_id");
-      const { data: authorsData, error: authorsError } = await supabase.from("userlogin").select("id, name").eq("id", data.map(b => b.author_id));
-      if (error) throw error;
+      // Ambil semua blog
+      const { data: blogData, error: blogError } = await supabase
+        .from("blogDB")
+        .select("id, title, desc, isi, author_id");
+
+      if (blogError) throw blogError;
+
+      if (!blogData || blogData.length === 0) {
+        set({ blog: [], loading: false });
+        return;
+      }
+
+      // Ambil semua author_id unik
+      const authorIds = [...new Set(blogData.map(b => Number(b.author_id)).filter(Boolean))];
+
+      // Ambil data author pakai IN
+      const { data: authorsData, error: authorsError } = await supabase
+        .from("userlogin")
+        .select("id, name")
+        .in("id", authorIds);
+
       if (authorsError) throw authorsError;
-      const blogsWithAuthors = data.map(b => {
-        const author = authorsData.find(a => a.id === b.author_id);
-        return { ...b, author_name: author ? author.name : "Unknown Author" };
+
+      // Gabung blog + author
+      const blogsWithAuthors = blogData.map(b => {
+        const author = authorsData?.find(a => Number(a.id) === Number(b.author_id));
+        return {
+          ...b,
+          author_name: author ? author.name : "Unknown Author",
+        };
       });
+
       set({ blog: blogsWithAuthors, loading: false });
+
     } catch (error) {
       set({ error: error.message, loading: false });
     }
   },
+
   fetchBlogByAuthor: async (author_id) => {
     set({ loading: true, error: null });
     try {

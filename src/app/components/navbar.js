@@ -7,10 +7,10 @@ const Nav = ({ session, image }) => {
         <h1 className="font-bold ml-2 font-Poppins text-pink-500">Anomali Activity</h1>
         <ul className="flex gap-3 mr-5 text-gray-500">
           <li>
-            <Link href="/blog">Blog</Link>
+            <Link href="/">home</Link>
           </li>
           <li>
-            <Link href="/profile">Info</Link>
+            <Link href="/profile">profil</Link>
           </li>
           <li>
             {session?.user?.role === "admin" ? <Link href="/admin">Admin</Link> : null}

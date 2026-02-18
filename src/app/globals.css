@@ -19,3 +19,115 @@
     /* Firefox */
   }
 }
+
+.markdown-preview h1 {
+  color: white;
+}
+
+.markdown-preview h2 {
+  color: white;
+}
+
+.markdown-preview h3 {
+  color: white;
+}
+
+.markdown-preview h4 {
+  color: white;
+}
+
+.markdown-preview h5 {
+  color: white;
+}
+
+.markdown-preview h6 {
+  color: white;
+}
+
+.markdown-preview a {
+  color: white;
+}
+
+/* Tambahkan ini di App.css atau file CSS lain */
+.markdown-preview h1 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview h2 {
+  font-size: 1.75em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.markdown-preview li {
+  margin: 0.3em 0;
+}
+
+.markdown-preview code {
+  background-color: #2c2a2a;
+  /* Warna latar belakang untuk kode inline */
+  padding: 2px 4px;
+  /* Padding untuk ruang di sekitar kode */
+  border-radius: 3px;
+  /* Membuat sudut sedikit melengkung */
+  font-family: 'Courier New', Courier, monospace;
+  /* Menggunakan font monospace */
+  color: white;
+}
+
+.markdown-preview pre {
+  background-color: #2c2a2a;
+  padding: 1em;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.markdown-preview th {
+  background-color: #f0f0f0;
+}
+
+.markdown-preview {
+  color: white;
+}
+
+.markdown-preview hr {
+  border: none;
+  height: 2px;
+  background-color: white;
+  margin: 20px 0;
+}
+
+.markdown-preview strong {
+  color: white;
+}
+
+.markdown-preview blockquote {
+  color: white;
+  border-left: 4px solid #007acc;
+  padding: 10px 20px;
+  margin: 10px 0;
+  font-style: italic;
+}
