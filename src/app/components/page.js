@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import { useAnomaliStore } from "@/store/authstore";
-import { Edit } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,9 @@ const Profile = ({ session }) => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [ign, setIgn] = useState("");
-  const [image_url, setImage_url] = useState("");
+  const [image, setImage] = useState(null);
+  const [imgurl, setImgurl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!session?.user?.username) return;
@@ -20,19 +22,49 @@ const Profile = ({ session }) => {
     fetchBlogByAuthor(session.user.id);
   }, [fetchDatauser, fetchBlogByAuthor, session?.user?.username]);
 
-  // Saat menu dibuka, isi state dari user
   const openMenu = () => {
     setName(user.name || "");
     setIgn(user.ign || "");
-    setImage_url(user.image_url || "");
+    setImgurl(user.image_url || "");
     setMenu(true);
   };
+
   const closeMenu = () => setMenu(false);
 
-  const handleSave = () => {
-    // TODO: panggil store function untuk update user
-    editDatauser(name, ign, session.user.username, image_url);
-    console.log({ name, ign, image_url });
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("File harus berupa gambar");
+      return;
+    }
+
+    setImage(file);
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/image", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      setImgurl(data.url);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    await editDatauser(name, ign, session.user.username, imgurl);
     closeMenu();
   };
 
@@ -62,69 +94,94 @@ const Profile = ({ session }) => {
         </div>
       </div>
 
-      {/* Modal Edit Profile */}
+      {/* MODAL EDIT PROFILE (PERUBAHAN HANYA DI SINI) */}
       {menu && (
         <div
           className="w-full h-full fixed top-0 left-0 bg-black/50 flex justify-center items-center z-50"
           onClick={closeMenu}
         >
           <div
-            className="w-[300px] bg-white rounded-md p-4"
+            className="w-[320px] bg-white rounded-md p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h1 className="text-lg font-bold text-pink-500 mb-4">Edit Profile</h1>
+            <h1 className="text-lg font-bold text-pink-500 mb-3">Edit Profile</h1>
+
+            {/* Preview Avatar */}
+            <div className="flex justify-center mb-3">
+              <img
+                src={
+                  image
+                    ? URL.createObjectURL(image)
+                    : imgurl || "/default-avatar.png"
+                }
+                className="w-20 h-20 rounded-full object-cover bg-gray-200"
+              />
+            </div>
 
             <input
               type="text"
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-10 border px-3 rounded-md mb-3"
+              className="w-full h-10 border px-3 rounded-md mb-2"
             />
+
             <input
               type="text"
               placeholder="In Game Name"
               value={ign}
               onChange={(e) => setIgn(e.target.value)}
-              className="w-full h-10 border px-3 rounded-md mb-3"
+              className="w-full h-10 border px-3 rounded-md mb-2"
             />
+
             <input
-              type="text"
-              placeholder="Image URL"
-              value={image_url}
-              onChange={(e) => setImage_url(e.target.value)}
+              type="file"
+              accept="image/*"
+              onChange={handleImage}
               className="w-full h-10 border px-3 rounded-md mb-3"
             />
 
             <button
               className="w-full h-10 bg-pink-500 text-white rounded-md"
               onClick={handleSave}
+              disabled={uploading}
             >
-              Save
+              {uploading ? "Uploading..." : "Save"}
             </button>
           </div>
         </div>
       )}
 
-      {/* Blog section */}
+      {/* Blog section (TIDAK DIUBAH) */}
       <div className="flex gap-2 mt-9">
         <div className="w-[98%] h-[100px]">
           <div className="flex justify-between items-center">
             <h1 className="text-sm ml-2 font-bold text-gray-500">Blog Terbaru:</h1>
-            <button className="text-sm ml-2 text-gray-500 bg-pink-500 text-white px-3 py-1 rounded-md mr-2">
-              <Link href={`/editor/${user.id}`}>
-                Buat Blog
-              </Link>
-            </button>
+            <div className="flex gap-2 items-center">
+              <button className="text-sm ml-2 text-gray-500 bg-pink-500 text-white px-3 py-1 rounded-md mr-2">
+                <Link href={`/editor/${user.id}`}>
+                  Buat Blog
+                </Link>
+              </button>
+              {/* <button className="text-sm ml-2 text-gray-500 bg-yellow-500 text-white px-3 py-1 rounded-md mr-2">
+                <Link href={`/editor/${user.id}`}>
+                  Kirim Qs
+                </Link>
+              </button> */}
+            </div>
           </div>
 
           <div className="flex gap-2 mt-2 flex-col">
             {blog.length ? (
               blog.map((blog, i) => (
                 <div key={i}>
-                  <h1 className="text-sm ml-2 font-bold text-pink-500">{blog.title}</h1>
+                  <h1 className="text-sm ml-2 font-bold text-pink-500"><Link href={`/read/${blog.id}`}>{blog.title}</Link></h1>
                   <p className="text-sm ml-2 text-gray-500">{blog.desc}</p>
                   <p className="text-xs ml-2 text-gray-400">By {blog.author_name}</p>
+                  {/* <div className="flex gap-2 items-center">
+                    <a className="text-pink-500 ml-2 flex gap-2 items-center"><Edit className="w-4 h-4" />edit</a>
+                    <a className="text-pink-500 ml-2 flex gap-2 items-center"><Trash className="w-4 h-4" />detele</a>
+                  </div> */}
                 </div>
               ))
             ) : (
