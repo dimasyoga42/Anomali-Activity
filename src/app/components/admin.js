@@ -34,7 +34,6 @@ const Adminpage = () => {
 
   const hendler = (id) => {
     deleteMember(id)
-    alert("berhasil di hapus")
   }
 
   const handleSave = async () => {
