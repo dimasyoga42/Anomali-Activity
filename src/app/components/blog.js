@@ -36,7 +36,7 @@ const Blogview = () => {
                   {blog.map((item, i) => (
                     <div
                       key={item.id || i}
-                      className="h-[90px] lg:w-[200px] w-[85%] flex items-center shadow border border-gray-200 rounded-md p-2 bg-white hover:shadow-md transition"
+                      className="h-[90px] lg:w-[200px] w-[98%] mx-auto flex items-center shadow border border-gray-200 rounded-md p-2 bg-white hover:shadow-md transition"
                     >
                       <div>
                         <h1 className="text-lg font-bold text-pink-500 leading-tight">
