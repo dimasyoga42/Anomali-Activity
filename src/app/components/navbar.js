@@ -18,7 +18,7 @@ const Nav = ({ session, image }) => {
   }, [])
 
   return (
-    <nav className="w-full bg-white border-b shadow-sm">
+    <nav className="w-full">
       <div className="max-w-6xl mx-auto h-16 px-4 flex items-center justify-between">
 
         {/* Logo */}
