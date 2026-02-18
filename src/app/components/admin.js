@@ -5,7 +5,7 @@ import { Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const Adminpage = () => {
-  const { member, fetchMember, editMember, loading, error } = useAnomaliStore();
+  const { member, deleteMember, fetchMember, editMember, loading, error } = useAnomaliStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -31,6 +31,11 @@ const Adminpage = () => {
     setIsOpen(false);
     setSelectedId(null);
   };
+
+  const hendler = (id) => {
+    deleteMember(id)
+    alert("berhasil di hapus")
+  }
 
   const handleSave = async () => {
     // TODO: panggil updateMember dari store
@@ -93,7 +98,7 @@ const Adminpage = () => {
                     <Edit className="w-4 h-4 text-yellow-500" />
                   </button>
 
-                  <button className="hover:text-red-500">
+                  <button className="hover:text-red-500" onClick={hendler(m.id)}>
                     <Trash className="w-4 h-4 text-rose-600" />
                   </button>
                 </div>

@@ -97,6 +97,35 @@ export const useAnomaliStore = create((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+  deleteMember: async (id) => {
+    set({ loading: true, error: null });
+
+    try {
+      const { error } = await supabase
+        .from("userlogin")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        return set({
+          error: error.message,
+          loading: false,
+        });
+      }
+
+      set((state) => ({
+        member: state.member.filter((m) => m.id !== id),
+        loading: false,
+        error: null,
+      }));
+    } catch (err) {
+      set({
+        error: err.message || "Terjadi kesalahan",
+        loading: false,
+      });
+    }
+  },
+
 
   insertBanner: async (title, link) => {
     set({ loading: true, error: null });
