@@ -96,10 +96,6 @@ const Adminpage = () => {
                   >
                     <Edit className="w-4 h-4 text-yellow-500" />
                   </button>
-
-                  <button className="hover:text-red-500" onClick={hendler(m.id)}>
-                    <Trash className="w-4 h-4 text-rose-600" />
-                  </button>
                 </div>
               </div>
             </div>
