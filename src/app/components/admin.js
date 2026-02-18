@@ -32,10 +32,6 @@ const Adminpage = () => {
     setSelectedId(null);
   };
 
-  const hendler = (id) => {
-    deleteMember(id)
-  }
-
   const handleSave = async () => {
     // TODO: panggil updateMember dari store
     console.log("Update member:", {
