@@ -34,11 +34,20 @@ const Nav = ({ session, image }) => {
             </Link>
           </li>
 
-          <li>
-            <Link href="/profile" className="hover:text-pink-500 transition">
-              Profil
-            </Link>
-          </li>
+          {session ? (
+            <li className="border-b">
+              <Link
+                href="/profile"
+                className="block px-4 py-3 hover:bg-gray-50"
+                onClick={() => setOpen(false)}
+              >
+                Profil
+              </Link>
+            </li>
+
+          ) : (
+            null
+          )}
 
           {session?.user?.role === "admin" && (
             <li>
