@@ -60,7 +60,7 @@ const Nav = ({ session, image }) => {
           <li>
             {session ? (
               <span className="text-gray-800 font-semibold">
-                {session.user.username}
+                <img src={session.user.image_url} alt={session.username} />
               </span>
             ) : (
               <Link href="/login" className="hover:text-pink-500 transition">
