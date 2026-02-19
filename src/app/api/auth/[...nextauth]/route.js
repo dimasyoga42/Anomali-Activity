@@ -27,12 +27,12 @@ export const authOptions = {
         const isValid = await bcrypt.compare(credentials.password, data.password);
 
         if (!isValid) return null;
-
+        console.log(data.image_url)
         return {
           id: data.id,
           name: data.name,
           username: data.username,
-          image: data.image_url,
+          image_url: data.image_url,
           role: data.role,
         };
       },

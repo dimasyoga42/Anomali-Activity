@@ -35,10 +35,10 @@ const Nav = ({ session, image }) => {
           </li>
 
           {session ? (
-            <li className="border-b">
+            <li className="">
               <Link
                 href="/profile"
-                className="block px-4 py-3 hover:bg-gray-50"
+                className="block px-4 py-3 hover:text-pink-500"
                 onClick={() => setOpen(false)}
               >
                 Profil
@@ -60,7 +60,7 @@ const Nav = ({ session, image }) => {
           <li>
             {session ? (
               <span className="text-gray-800 font-semibold">
-                <img src={session.user.image_url} alt={session.username} />
+                {session.user.username}
               </span>
             ) : (
               <Link href="/login" className="hover:text-pink-500 transition">
