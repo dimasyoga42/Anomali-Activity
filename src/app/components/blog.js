@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useAnomaliStore } from "@/store/authstore";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -14,20 +14,15 @@ const Blogview = () => {
     <div className="w-auto">
       <div className="mt-9">
         <div className="w-[98%]">
-
           <div className="flex justify-between items-center">
             <h1 className="text-sm ml-2 font-bold text-gray-500">
               Blog Terbaru:
             </h1>
           </div>
 
-          {loading && (
-            <p className="text-sm ml-2 text-gray-400">Loading...</p>
-          )}
+          {loading && <p className="text-sm ml-2 text-gray-400">Loading...</p>}
 
-          {error && (
-            <p className="text-sm ml-2 text-red-500">Error: {error}</p>
-          )}
+          {error && <p className="text-sm ml-2 text-red-500">Error: {error}</p>}
 
           {!loading && !error && (
             <>
@@ -36,13 +31,11 @@ const Blogview = () => {
                   {blog.map((item, i) => (
                     <div
                       key={item.id || i}
-                      className="h-[90px] lg:w-[200px] w-[95%] mx-auto lg:mx-0 flex  items-center shadow border border-gray-200 rounded-md p-2 bg-white hover:shadow-sm transition"
+                      className="h-[150px] lg:w-[320px] w-[95%] mx-auto flex items-center shadow border border-gray-200 rounded-md p-2  bg-white hover:shadow-sm transition"
                     >
                       <div>
-                        <h1 className="text-lg font-bold text-pink-500 leading-tight">
-                          <Link href={`/read/${item.id}`}>
-                            {item.title}
-                          </Link>
+                        <h1 className="text-md font-bold text-pink-500 leading-tight">
+                          <Link href={`/read/${item.id}`}>{item.title}</Link>
                         </h1>
 
                         <p className="text-xs text-gray-400">
@@ -57,13 +50,10 @@ const Blogview = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm ml-2 text-gray-400">
-                  Belum ada blog.
-                </p>
+                <p className="text-sm ml-2 text-gray-400">Belum ada blog.</p>
               )}
             </>
           )}
-
         </div>
       </div>
     </div>
