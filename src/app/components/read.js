@@ -1,26 +1,24 @@
 "use client";
-import Nav from "@/app/components/navbar"
-import Foter from "./foter"
+import Nav from "@/app/components/navbar";
+import Foter from "./foter";
 import { useAnomaliStore } from "@/store/authstore";
 import { useEffect } from "react";
-import remarkGfm from 'remark-gfm'
+import remarkGfm from "remark-gfm";
 import { useParams } from "next/navigation";
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from "react-markdown";
 const Readblog = ({ seasson }) => {
-  const { blog, viewBlog, loading, error } = useAnomaliStore()
-  const { id_blog } = useParams()
+  const { blog, viewBlog, loading, error } = useAnomaliStore();
+  const { name } = useParams();
   useEffect(() => {
     const run = async () => {
-      await viewBlog(id_blog)
-    }
-    run()
+      await viewBlog(name);
+    };
+    run();
   }, [viewBlog]);
 
   if (loading) {
-
   }
   if (error) {
-
   }
   return (
     <>
@@ -29,7 +27,6 @@ const Readblog = ({ seasson }) => {
 
         {/* CONTAINER */}
         <main className="max-w-3xl mx-auto px-4 md:px-6 lg:px-8">
-
           {/* HEADER BLOG */}
           <header className="py-10 border-b border-gray-200">
             <h1 className="text-3xl md:text-4xl font-extrabold text-pink-500 leading-tight">
@@ -38,7 +35,10 @@ const Readblog = ({ seasson }) => {
 
             <div className="mt-3 space-y-1">
               <p className="text-sm text-gray-500 italic">
-                author by <span className="text-pink-500 font-medium">{blog.author_name}</span>
+                author by{" "}
+                <span className="text-pink-500 font-medium">
+                  {blog.author_name}
+                </span>
               </p>
 
               <p className="text-gray-600 text-sm md:text-base leading-relaxed">
@@ -83,9 +83,7 @@ const Readblog = ({ seasson }) => {
                 ),
 
                 em: ({ children }) => (
-                  <em className="italic text-gray-600">
-                    {children}
-                  </em>
+                  <em className="italic text-gray-600">{children}</em>
                 ),
 
                 a: ({ href, children }) => (
@@ -112,9 +110,7 @@ const Readblog = ({ seasson }) => {
                 ),
 
                 li: ({ children }) => (
-                  <li className="leading-relaxed">
-                    {children}
-                  </li>
+                  <li className="leading-relaxed">{children}</li>
                 ),
 
                 blockquote: ({ children }) => (
@@ -123,9 +119,7 @@ const Readblog = ({ seasson }) => {
                   </blockquote>
                 ),
 
-                hr: () => (
-                  <hr className="my-10 border-gray-200" />
-                ),
+                hr: () => <hr className="my-10 border-gray-200" />,
 
                 img: ({ src, alt }) => (
                   <img
@@ -182,7 +176,7 @@ const Readblog = ({ seasson }) => {
         <Foter />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Readblog
+export default Readblog;

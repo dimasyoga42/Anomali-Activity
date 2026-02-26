@@ -35,7 +35,7 @@ const Blogview = () => {
                     >
                       <div>
                         <h1 className="text-md font-bold text-pink-500 leading-tight">
-                          <Link href={`/read/${item.id}`}>{item.title}</Link>
+                          <Link href={`/read/${item.title}`}>{item.title}</Link>
                         </h1>
 
                         <p className="text-xs text-gray-400">
