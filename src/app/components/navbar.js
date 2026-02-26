@@ -1,33 +1,32 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useState, useRef, useEffect } from "react"
+import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
 
 const Nav = ({ session, image }) => {
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef(null)
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setOpen(false)
+        setOpen(false);
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="w-full">
       <div className="max-w-6xl mx-auto h-16 px-4 flex items-center justify-between">
-
         {/* Logo */}
         <h1 className="font-bold text-pink-500 text-lg font-Poppins">
           Anomali Activity
         </h1>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex items-center gap-6 text-gray-600 font-medium">
+        <ul className="hidden md:flex items-center gap-3 text-gray-600 font-medium">
           <li>
             <Link href="/" className="hover:text-pink-500 transition">
               Home
@@ -38,16 +37,24 @@ const Nav = ({ session, image }) => {
             <li className="">
               <Link
                 href="/profile"
-                className="block px-4 py-3 hover:text-pink-500"
+                className=" hover:text-pink-500"
                 onClick={() => setOpen(false)}
               >
                 Profil
               </Link>
             </li>
-
-          ) : (
-            null
-          )}
+          ) : null}
+          {session ? (
+            <li className="">
+              <Link
+                href="/quest"
+                className=" hover:text-pink-500"
+                onClick={() => setOpen(false)}
+              >
+                quest
+              </Link>
+            </li>
+          ) : null}
 
           {session?.user?.role === "admin" && (
             <li>
@@ -83,12 +90,8 @@ const Nav = ({ session, image }) => {
 
       {/* Mobile Menu */}
       {open && (
-        <div
-          ref={menuRef}
-          className="md:hidden bg-white border-t shadow-sm"
-        >
+        <div ref={menuRef} className="md:hidden bg-white border-t shadow-sm">
           <ul className="flex flex-col text-gray-700 font-medium">
-
             <li className="border-b">
               <Link
                 href="/"
@@ -99,22 +102,17 @@ const Nav = ({ session, image }) => {
               </Link>
             </li>
 
-            {
-              session ? (
-                <li className="border-b">
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-3 hover:bg-gray-50"
-                    onClick={() => setOpen(false)}
-                  >
-                    Profil
-                  </Link>
-                </li>
-
-              ) : (
-                null
-              )
-            }
+            {session ? (
+              <li className="border-b">
+                <Link
+                  href="/profile"
+                  className="block px-4 py-3 hover:bg-gray-50"
+                  onClick={() => setOpen(false)}
+                >
+                  Profil
+                </Link>
+              </li>
+            ) : null}
 
             {session?.user?.role === "admin" && (
               <li className="border-b">
@@ -143,12 +141,11 @@ const Nav = ({ session, image }) => {
                 </Link>
               )}
             </li>
-
           </ul>
         </div>
       )}
     </nav>
-  )
-}
+  );
+};
 
-export default Nav
+export default Nav;
