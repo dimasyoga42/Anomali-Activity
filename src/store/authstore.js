@@ -260,20 +260,31 @@ export const useAnomaliStore = create((set) => ({
   },
   viewBlog: async (name) => {
     set({ loading: true, error: null });
+
     try {
+      // decode dari URL (hapus %20 dll)
+      const decoded = decodeURIComponent(name);
+
       const { data, error } = await supabase
         .from("blogDB")
         .select("title, desc, isi, author_id")
-        .eq("title", name)
+        .eq("title", decoded)
         .single();
+
+      if (error) throw error;
+
       const { data: authorData, error: authorError } = await supabase
         .from("userlogin")
         .select("name")
         .eq("id", data.author_id)
         .single();
-      if (error) throw error;
+
       if (authorError) throw authorError;
-      set({ blog: { ...data, author_name: authorData.name }, loading: false });
+
+      set({
+        blog: { ...data, author_name: authorData.name },
+        loading: false,
+      });
     } catch (error) {
       set({ error: error.message, loading: false });
     }
